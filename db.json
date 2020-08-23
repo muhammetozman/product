@@ -1,0 +1,12 @@
+{
+  "products": [
+    {
+      "name": "Phone",
+      "productdate": "11/02/2020",
+      "barcode": "14fs31-s31dfs",
+      "expiration": "21/03/2040",
+      "website": "amazon.com",
+      "id": 1
+    }
+  ]
+}
