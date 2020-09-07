@@ -7,17 +7,25 @@ const Product = () => {
     name: "",
     productdate: "",
     barcode: "",
-    expiration: "",
-    website: "" 
+    expiration: ""
+    
   });
+  
   const { id } = useParams();
   useEffect(() => {
   loadProduct();
   }, []);
+  console.log({id})
+ 
   const loadProduct = async () => {
-    const res = await axios.get(`http://localhost:3003/products/${id}`);
-    setProduct(res.data);
+   
+      axios.get("/api/product/"+id).then((result)=>{
+      console.log("result : "+JSON.stringify(result.data))
+      setProduct(result.data);
+   
+     })
   };
+
   return (
     <div className="container py-4">
       <Link className="btn btn-primary" to="/">
@@ -30,7 +38,7 @@ const Product = () => {
         <li className="list-group-item">Product Date: {product.productdate}</li>
         <li className="list-group-item">Barcode No: {product.barcode}</li>
         <li className="list-group-item">Expiration Date: {product.expiration}</li>
-        <li className="list-group-item">Website: {product.website}</li>
+      
       </ul>
     </div>
   );

@@ -8,17 +8,33 @@ const Home = () => {
   useEffect(() => {
     loadProducts();
   }, []);
-
+  
+  
   const loadProducts = async () => {
-    const result = await axios.get("http://localhost:3003/products");
-    setProduct(result.data.reverse());
+      
+      axios.get("/api/product").then((result)=>{
+      console.log("result : "+JSON.stringify(result.data))
+      setProduct(result.data.product);
+    })
+    .catch((e)=>{
+      console.log("e"+e) 
+    })
+   
   };
 
   const deleteProduct = async id => {
-    await axios.delete(`http://localhost:3003/products/${id}`);
+   
+      axios.delete(`/api/product/${id}`).then(res => {
+        console.log(JSON.stringify(res.data));
+    })
+      .catch((err) => {
+        console.log(err);
+    })
+    
     loadProducts();
-  };
 
+  };
+ 
   return (
     <div className="container">
       <div className="py-4">
@@ -36,25 +52,25 @@ const Home = () => {
           </thead>
           <tbody>
             {products.map((product, index) => (
-              <tr>
+              <tr key={index}>
                 <th scope="row">{index + 1}</th>
                 <td>{product.name}</td>
                 <td>{product.productdate}</td>
                 <td>{product.barcode}</td>
                 <td>{product.expiration}</td>
                 <td>
-                  <Link class="btn btn-primary mr-2" to={`/products/${product.id}`}>
+                  <Link class="btn btn-primary mr-2" to={`/products/${product._id}`}>
                     View
                   </Link>
                   <Link
                     class="btn btn-outline-primary mr-2"
-                    to={`/products/edit/${product.id}`}
+                    to={`/products/edit/${product._id}`}
                   >
                     Edit
                   </Link>
                   <Link
                     class="btn btn-danger"
-                    onClick={() => deleteProduct(product.id)}
+                    onClick={() => deleteProduct(product._id)}
                   >
                     Delete
                   </Link>

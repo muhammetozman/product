@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { useHistory, useParams } from "react-router-dom";
+import {Link, useHistory, useParams } from "react-router-dom";
 
 const EditProduct = () => {
   let history = useHistory();
@@ -9,11 +9,11 @@ const EditProduct = () => {
     name: "",
     productdate: "",
     barcode: "",
-    expiration: "",
-    website: "" 
+    expiration: ""
+   
   });
 
-  const { name, productdate, barcode, expiration, website } = product;
+  const { name, productdate, barcode, expiration } = product;
   const onInputChange = e => {
     setProduct({ ...product, [e.target.name]: e.target.value });
   };
@@ -24,17 +24,26 @@ const EditProduct = () => {
 
   const onSubmit = async e => {
     e.preventDefault();
-    await axios.put(`http://localhost:3003/products/${id}`, product);
+    await axios.put(`/api/product/${id}`, product);
     history.push("/");
+    
   };
 
-  const loadProduct = async () => {
-    const result = await axios.get(`http://localhost:3003/products/${id}`);
-    setProduct(result.data);
+  const loadProduct = async  => {
+      axios.get("/api/product/"+id).then((result)=>{
+    
+      console.log("result : "+JSON.stringify(result.data))
+      setProduct(result.data);
+ 
+     })
+     
   };
   return (
     <div className="container">
-      <div className="w-75 mx-auto shadow p-5">
+     <Link className="btn btn-primary" style={{marginTop:"10px"}} to="/">
+        Back to Product Page
+      </Link>
+      <div className="w-75 mx-auto shadow p-5" style={{marginTop:"30px"}}>
         <h2 className="text-center mb-4">Edit A Product</h2>
         <form onSubmit={e => onSubmit(e)}>
           <div className="form-group">
@@ -77,16 +86,7 @@ const EditProduct = () => {
               onChange={e => onInputChange(e)}
             />
           </div>
-          <div className="form-group">
-            <input
-              type="text"
-              className="form-control form-control-lg"
-              placeholder="Enter Your Website Name"
-              name="website"
-              value={website}
-              onChange={e => onInputChange(e)}
-            />
-          </div>
+          
           <button className="btn btn-warning btn-block">Update Product</button>
         </form>
       </div>
